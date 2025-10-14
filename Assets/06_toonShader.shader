@@ -51,8 +51,9 @@ Shader "Unlit/05_"
                 fixed4 ambient= _Color*0.3*_LightColor0;
 
                 float intensity=saturate(dot(normalize(i.normal),_WorldSpaceLightPos0));
-               
-                fixed4 diffuse=_Color * intensity * _LightColor0;
+                float toonStep = smoothstep(0.6, 0.64, intensity); 
+                toonStep = floor(toonStep * 3.0) / 2.0;
+                fixed4 diffuse=_Color * toonStep * _LightColor0;
 
                 
                 float3 eyeDir = normalize(_WorldSpaceCameraPos.xyz - i.worldPosition);
@@ -61,7 +62,7 @@ Shader "Unlit/05_"
                 float3 reflectDir = -lightDir+ 2 * i.normal * dot(i.normal,lightDir);
                 fixed4 specular = pow(saturate(dot(reflectDir,eyeDir)),20) * _LightColor0;
 
-                fixed4 phong = ambient + diffuse+specular;
+                fixed4 phong = ambient + diffuse;
                 fixed4 col = tex2D(_MainTex, i.uv * tiling + offset);
 
                 fixed4 phongCol= phong * col;
