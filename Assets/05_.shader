@@ -61,7 +61,7 @@ Shader "Unlit/05_"
                 float3 reflectDir = -lightDir+ 2 * i.normal * dot(i.normal,lightDir);
                 fixed4 specular = pow(saturate(dot(reflectDir,eyeDir)),20) * _LightColor0;
 
-                fixed4 phong = ambient + diffuse+specular;
+                fixed4 phong = ambient + diffuse+specular ;
                 fixed4 col = tex2D(_MainTex, i.uv * tiling + offset);
 
                 fixed4 phongCol= phong * col;
