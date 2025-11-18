@@ -2,20 +2,20 @@ Shader "Unlit/05_Fixed_WithRim_Toggle"
 {
     Properties
     {
-        _MainTex ("•∆•Ø•π•¡•„", 2D) = "white" {}
-        _Color ("ª˘±æ…´", Color) = (1,1,1,1)
+        _MainTex ("„ÉÜ„ÇØ„Çπ„ÉÅ„É£", 2D) = "white" {}
+        _Color ("Âü∫Êú¨Ëâ≤", Color) = (1,1,1,1)
 
-        // --- •«•£•’•Â©`•∫‘O∂® ---
+        // --- „Éá„Ç£„Éï„É•„Éº„Ç∫Ë®≠ÂÆö ---
         [Toggle(_USE_DIFFUSE)] _UseDiffuse("Diffuse", Float) = 1
         _DiffuseThreshold ("_DiffuseThreshold", Range(0,1)) = 0.5
         _DiffuseThresMax ("_DiffuseThresMax", Range(0,0.05)) = 0.0
 
-        // --- •π•⁄•≠•Â•È©`‘O∂® ---
+        // --- „Çπ„Éö„Ç≠„É•„É©„ÉºË®≠ÂÆö ---
         [Toggle(_USE_SPECULAR)] _UseSpecular("Specular", Float) = 1
         _SpecularThresholdWidth("_SpecularThresholdWidth", Range(0,0.1)) = 0
         _SpecularThreshold ("_SpecularThreshold", Range(0,1)) = 0.5
 
-        // --- •Í•‡•È•§•»‘O∂® ---
+        // --- „É™„É†„É©„Ç§„ÉàË®≠ÂÆö ---
         [Toggle(_USE_RIM)] _UseRim("Rim", Float) = 1
         _RimColor("_RimColor", Color) = (1,1,1,1)
         _RimPower("_RimPower", Range(0.1,1)) = 0.7
@@ -32,7 +32,7 @@ Shader "Unlit/05_Fixed_WithRim_Toggle"
             #pragma vertex vert
             #pragma fragment frag
 
-            // --- ∏˜•»•∞•Î§Œ∑÷·™ ---
+            // --- ÂêÑ„Éà„Ç∞„É´„ÅÆÂàÜÂ≤ê ---
             #pragma multi_compile _ _USE_DIFFUSE
             #pragma multi_compile _ _USE_SPECULAR
             #pragma multi_compile _ _USE_RIM
@@ -81,17 +81,17 @@ Shader "Unlit/05_Fixed_WithRim_Toggle"
 
             fixed4 frag(v2f i) : SV_Target
             {
-                // --- ª˘±æ‘O∂® ---
+                // --- Âü∫Êú¨Ë®≠ÂÆö ---
                 i.normal = normalize(i.normal);
                 float3 lightDir = normalize(_WorldSpaceLightPos0.xyz);
                 float3 viewDir = normalize(_WorldSpaceCameraPos - i.worldPos);
 
-                // --- ≠hæ≥π‚ ---
+                // --- Áí∞Â¢ÉÂÖâ ---
 
                  fixed4   ambient = _Color * 0.1;
           
 
-                // --- •«•£•’•Â©`•∫π‚ ---
+                // --- „Éá„Ç£„Éï„É•„Éº„Ç∫ÂÖâ ---
                 fixed4 diffuse = 0;
                 #ifdef _USE_DIFFUSE
                     float intensity = saturate(dot(normalize(i.normal), _WorldSpaceLightPos0));
@@ -99,7 +99,7 @@ Shader "Unlit/05_Fixed_WithRim_Toggle"
                     diffuse = _Color * intensity * _LightColor0;
                 #endif
 
-                // --- •π•⁄•≠•Â•È©`π‚ ---
+                // --- „Çπ„Éö„Ç≠„É•„É©„ÉºÂÖâ ---
                 fixed4 specular = 0;
                 #ifdef _USE_SPECULAR
                     float3 reflectDir = -lightDir + 2 * i.normal * dot(i.normal, lightDir);
@@ -108,14 +108,14 @@ Shader "Unlit/05_Fixed_WithRim_Toggle"
                     specular = spec * _LightColor0;
                 #endif
 
-                // --- •Í•‡•È•§•» ---
+                // --- „É™„É†„É©„Ç§„Éà ---
                 fixed4 rimLight = 0;
                 #ifdef _USE_RIM
                     float rim = 1.0 - step(_RimPower, dot(viewDir, i.normal));
                     rimLight = _RimColor * rim * _RimIntensity;
                 #endif
 
-                // --- •∆•Ø•π•¡•„∫œ≥… ---
+                // --- „ÉÜ„ÇØ„Çπ„ÉÅ„É£ÂêàÊàê ---
                 fixed4 texColor = tex2D(_MainTex, i.uv);
                 fixed4 finalColor = (ambient + diffuse + specular + rimLight) * texColor;
 
