@@ -8,14 +8,14 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Unlit_02_Lambert
-  m_Shader: {fileID: 4800000, guid: 957a51039c6eded4297a6a88aae0ef0d, type: 3}
+  m_Shader: {fileID: 4800000, guid: a5bf98912108d3043888adbcb4add633, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
+  m_ValidKeywords: []
+  m_InvalidKeywords:
   - _USE_DIFFUSE
   - _USE_RIM
   - _USE_SPECULAR
-  m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
   m_DoubleSidedGI: 0
@@ -26,18 +26,43 @@ Material:
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
+    - _BlendTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 0, y: 0}
+        m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: bf2a0b036c31d624288b05298c8cb8c3, type: 3}
-        m_Scale: {x: 16, y: 16}
+        m_Texture: {fileID: 2800000, guid: 964c021107820f44d87eb048bb6508b3, type: 3}
+        m_Scale: {x: 22, y: 22}
+        m_Offset: {x: 0, y: 0}
+    - _MaskTex:
+        m_Texture: {fileID: 2800000, guid: c31547946074277488df4932701db444, type: 3}
+        m_Scale: {x: 0, y: 1}
+        m_Offset: {x: 1, y: 1}
+    - _SpecMap:
+        m_Texture: {fileID: 2800000, guid: c31547946074277488df4932701db444, type: 3}
+        m_Scale: {x: 1, y: 10}
+        m_Offset: {x: 0, y: 0}
+    - _SpecTex:
+        m_Texture: {fileID: 2800000, guid: c31547946074277488df4932701db444, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SubTex:
+        m_Texture: {fileID: 2800000, guid: d11ec6dd7c7e8854bb949fc3c9ce6a20, type: 3}
+        m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
+    - _Alpha: 1
     - _AmbientIntensity: 0.1
+    - _BlendFactor: 0
     - _DiffuseThresMax: 0.05
     - _DiffuseThreshold: 0
     - _DiffusethresMax: 0
     - _RimIntensity: 2
     - _RimPower: 0.41
+    - _Shininess: 1
+    - _SpecIntensity: 0.841
+    - _SpecRange: 0.504
     - _SpecularThreshold: 0
     - _SpecularThresholdWidth: 0.1
     - _UseAmbient: 0
@@ -45,7 +70,10 @@ Material:
     - _UseRim: 1
     - _UseSpecular: 1
     m_Colors:
-    - _Color: {r: 0.083230965, g: 0.4339623, b: 0, a: 1}
+    - _Color: {r: 1, g: 0.41121435, b: 0, a: 1}
+    - _MainColor: {r: 1, g: 1, b: 1, a: 1}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
+    - _SpecColor: {r: 0.24313726, g: 0.006131046, b: 0.38993698, a: 1}
+    - _SubColor: {r: 0.6603774, g: 0.6603774, b: 0.6603774, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

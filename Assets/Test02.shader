@@ -1,4 +1,4 @@
-Shader "Unlit/Test02_PhongBlend_Final"
+Shader "Unlit/Test02_Fixed"
 {
     Properties
     {
@@ -6,19 +6,23 @@ Shader "Unlit/Test02_PhongBlend_Final"
         _SubTex ("Sub Texture", 2D) = "white" {}
         _MaskTex ("Mask Texture", 2D) = "black" {}
 
-        _MainColor ("Main Color", Color) = (1,1,1,1)
-        _SubColor  ("Sub Color", Color)  = (1,1,1,1)
-
         _SpecColor ("Specular Color", Color) = (1,1,1,1)
         _SpecTex ("Specular Map", 2D) = "white" {}
         _Shininess ("Shininess", Range(1,64)) = 16
+        _MainColor ("Main Color", Color) = (1,1,1,1)
+        _SubColor  ("Sub Color", Color)  = (1,1,1,1)
         _SpecIntensity ("Spec Intensity", Range(0,2)) = 1
         _SpecRange ("Specular Range", Range(0,1)) = 0.5
     }
 
     SubShader
     {
-        Tags { "Queue"="Transparent" "RenderType"="Transparent" }
+        Tags 
+        { 
+            "Queue"="Transparent"
+            "RenderType"="Transparent"
+        }
+
         Blend SrcAlpha OneMinusSrcAlpha
         ZWrite Off
 
@@ -28,7 +32,6 @@ Shader "Unlit/Test02_PhongBlend_Final"
             #pragma vertex vert
             #pragma fragment frag
             #include "UnityCG.cginc"
-            #include "Lighting.cginc"
 
             struct appdata
             {
@@ -45,12 +48,20 @@ Shader "Unlit/Test02_PhongBlend_Final"
                 float3 worldPos : TEXCOORD2;
             };
 
-            sampler2D _MainTex, _SubTex, _MaskTex, _SpecTex;
-            float4 _MainTex_ST;
+            sampler2D _MainTex;
+            sampler2D _SubTex;
+            sampler2D _MaskTex;
+            sampler2D _SpecTex;
 
-            float4 _MainColor, _SubColor;
-            float4 m_SpecColor;
-            float _Shininess, _SpecIntensity, _SpecRange;
+            float4 _MainTex_ST;
+            float4 _SpecTex_ST;
+
+            float4 _SpecColor;
+            float _Shininess;
+
+            float4 _MainColor;
+            float4 _SubColor;
+            float _SpecIntensity;
 
             v2f vert (appdata v)
             {
@@ -59,41 +70,36 @@ Shader "Unlit/Test02_PhongBlend_Final"
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.worldNormal = UnityObjectToWorldNormal(v.normal);
                 o.worldPos = mul(unity_ObjectToWorld, v.vertex).xyz;
+
                 return o;
             }
 
             fixed4 frag (v2f i) : SV_Target
             {
                 // ===== Texture Blend =====
-                fixed4 main = tex2D(_MainTex, i.uv) * _MainColor;
-                fixed4 sub  = tex2D(_SubTex,  i.uv) * _SubColor;
+                fixed4 main = tex2D(_MainTex, i.uv * _MainTex_ST.xx) * _MainColor;
+                fixed4 sub  = tex2D(_SubTex, i.uv ) * _SubColor;
                 fixed4 mask = tex2D(_MaskTex, i.uv);
-                fixed4 col  = lerp(main, sub, mask.r);
+
+                fixed4 col = lerp(main, sub, mask.r);
 
                 // ===== Lighting vectors =====
                 float3 N = normalize(i.worldNormal);
                 float3 L = normalize(_WorldSpaceLightPos0.xyz);
                 float3 V = normalize(_WorldSpaceCameraPos - i.worldPos);
-
-                // ===== Ambient =====
-                fixed3 ambient = col.rgb * 0.3 * _LightColor0.rgb;
-
-                // ===== Diffuse =====
-                float diff = saturate(dot(N, L));
-                fixed3 diffuse = col.rgb * diff * _LightColor0.rgb;
+                float3 H = normalize(L + V);
 
                 // ===== Specular =====
-                float3 H = normalize(L + V);
-                float nh = saturate(dot(N, H));
-                float spec = smoothstep(1.0 - _SpecRange, 1.0, pow(nh, _Shininess));
-                spec = clamp(spec, 0, _SpecRange);
-
                 float specMask = tex2D(_SpecTex, i.uv).r;
-                fixed3 specular = spec * specMask * m_SpecColor.rgb * _SpecIntensity * _LightColor0.rgb;
+                float spec = pow(saturate(dot(N, H)), _Shininess);
 
+                fixed3 specular = spec * specMask * _SpecColor.rgb * _SpecIntensity;
+
+                // ===== Final =====
                 fixed4 finalColor;
-                finalColor.rgb = ambient + diffuse + specular;
-                finalColor.a = col.a * m_SpecColor.a;
+                finalColor.rgb = col.rgb + specular;
+                finalColor.a   = col.a*_SpecColor.a;
+
                 return finalColor;
             }
             ENDCG
