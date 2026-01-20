@@ -8,7 +8,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: Unlit_02_Lambert
-  m_Shader: {fileID: 4800000, guid: e017ffa3c04bbd24c86c6bfac0d44c36, type: 3}
+  m_Shader: {fileID: 4800000, guid: 490b826116d5cd5448a9bfcfa3e85fa1, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -66,6 +66,9 @@ Material:
     - _FadeStrength: 5
     - _MinAlpha: 1
     - _Mode: 0
+    - _NoiseScale: 19.9
+    - _NoiseStrength: 1
+    - _Octaves: 6
     - _RimIntensity: 2
     - _RimPower: 0.41
     - _Shininess: 1
